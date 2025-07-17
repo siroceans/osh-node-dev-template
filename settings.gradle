@@ -69,3 +69,24 @@ processProjects.files.each { File f ->
         project(projectName).projectDir = projectFolder
     }
 }
+
+include 'sensorhub-driver-joyconIR'
+project(':sensorhub-driver-joyconIR').projectDir = "$rootDir/sensors/sensorhub-driver-joyconIR" as File
+
+include 'sensorhub-service-video'
+project(':sensorhub-service-video').projectDir = "$serviceDir/sensorhub-service-video" as File
+
+include 'sensorhub-process-IRGameBoy'
+project(':sensorhub-process-IRGameBoy').projectDir = "$rootDir/processing/sensorhub-process-IRGameBoy" as File
+
+
+include 'sensorhub-process-helpers'
+project(':sensorhub-process-helpers').projectDir = "$processDir/processing/sensorhub-process-helpers" as File
+
+/*
+include 'sensorhub-process-opencv'
+project(':sensorhub-process-opencv').projectDir = "$processDir/sensorhub-process-opencv" as File
+
+include 'sensorhub-process-ffmpeg'
+project(':sensorhub-process-ffmpeg').projectDir = "$processDir/sensorhub-process-ffmpeg" as File
+ */

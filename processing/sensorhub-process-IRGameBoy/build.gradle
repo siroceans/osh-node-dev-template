@@ -1,0 +1,43 @@
+description = 'Process IR images obtained from JoyCon IR camera to look like gameboy camera images.'
+ext.details = "..."
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.sensorhub:sensorhub-core:' + oshCoreVersion
+    testImplementation('junit:junit:4.13.1')
+    implementation('org.openpnp:opencv:4.9.0-0')
+    implementation project(':sensorhub-service-video')
+    implementation project(':sensorhub-process-helpers')
+}
+
+// exclude tests requiring connection to the sensor
+// these have to be run manually
+//      If tests are to be excluded list them here as follows
+//          exclude '**/TestNameClass.class'
+test {
+    useJUnit()
+}
+
+// add info to OSGi manifest
+osgi {
+    manifest {
+        attributes ('Bundle-Vendor': 'Georobotix Inc.')
+        attributes ('Bundle-Activator': 'com.georobotix.impl.process.IRGameBoy.Activator')
+    }
+}
+
+// add info to maven pom
+ext.pom >>= {
+    developers {
+        developer {
+            id 'siroceans'
+            name 'Jorge Mares'
+            organization 'Georobotix Inc.'
+            organizationUrl ''
+        }
+    }
+}
