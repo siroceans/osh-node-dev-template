@@ -1,5 +1,6 @@
 package com.georobotix.impl.process.IRGameBoy;
 
+import net.opengis.sensorml.v20.AggregateProcess;
 import org.junit.Test;
 import com.botts.process.helpers.ProcessHelper;
 
@@ -15,12 +16,27 @@ public class XmlProcessWriter {
         ProcessHelper processHelper = new ProcessHelper();
         ProcessHelper.ProcessChainBuilder chainBuilder = processHelper.createProcessChain();
 
-        chainBuilder.uid("urn:osh:process:gameboycamera:uid");
-        chainBuilder.name("gameboyProcess");
-        chainBuilder.description("Process that takes joycon IR image and applies a gameboy camera filter to it");
-        chainBuilder.addOutputList(new GameboyProcess().getOutputList());
+        // JoyCon IR Driver
         chainBuilder.addDataSource("joyconcamera", "urn:osh:sensor:joycon-image");
-        chainBuilder.addConnection("joyconcamera/joyconIROutput", "ProcessInput");
-//        chainBuilder.addConnection("ProcessInput", "gameboyProcess/")
+
+        // gameboy camera process and output list
+        chainBuilder.addProcess("gameboyprocess", new GameboyProcess());
+        chainBuilder.addOutputList(new GameboyProcess().getOutputList());
+
+        // Connections
+        // components/[datasource-name]/outputs/[classname]/outputname -> components/[process-name]/inputs/[datarecord-name]/inputname
+        chainBuilder.addConnection("components/joyconcamera/outputs/JoyConImageOutput/time",
+                "components/gameboyprocess/inputs/VideoFrame/time");
+        chainBuilder.addConnection("components/joyconcamera/outputs/JoyConImageOutput/width",
+                "components/gameboyprocess/inputs/VideoFrame/width");
+        chainBuilder.addConnection("components/joyconcamera/outputs/JoyConImageOutput/height",
+                "components/gameboyprocess/inputs/VideoFrame/height");
+        chainBuilder.addConnection("components/joyconcamera/outputs/JoyConImageOutput/img",
+                "components/joyconcamera/outputs/img");
+
+        AggregateProcess finalProcess = chainBuilder.build();
+
+        processHelper.writeProcessXML(finalProcess, System.out);
+
     }
 }

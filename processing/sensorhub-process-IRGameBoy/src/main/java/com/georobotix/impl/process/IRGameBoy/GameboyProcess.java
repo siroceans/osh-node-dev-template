@@ -18,17 +18,13 @@ import javax.xml.crypto.Data;
 
 public class GameboyProcess extends ExecutableProcessImpl {
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
     protected double timeStamp;
     protected int imageWidth;
     protected int imageHeight;
     protected DataArray image;
     private static final String frame = "VideoFrame";
     public static final OSHProcessInfo INFO = new OSHProcessInfo(
-            frame,
+            "gameboycamera",
             "Image Process",
             "Image processing to make the IR images from the JoyCon IR camera look like gameboy camera images.",
             GameboyProcess.class);
