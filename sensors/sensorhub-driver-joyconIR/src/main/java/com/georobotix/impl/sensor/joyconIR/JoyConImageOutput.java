@@ -30,7 +30,7 @@ import java.util.Arrays;
  * Output specification and provider for {@link JoyConImageSensor}.
  */
 public class JoyConImageOutput extends AbstractSensorOutput<JoyConImageSensor> {
-    static final String SENSOR_OUTPUT_NAME = "joyconIR Output";
+    static final String SENSOR_OUTPUT_NAME = "joyconIROutput";
     static final String SENSOR_OUTPUT_LABEL = "IR Images and Video Output";
     static final String SENSOR_OUTPUT_DESCRIPTION = "Images and video from the infrared camera in the Nintendo Switch JoyCon";
 

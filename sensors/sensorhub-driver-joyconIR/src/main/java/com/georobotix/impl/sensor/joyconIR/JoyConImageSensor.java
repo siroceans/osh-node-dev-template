@@ -34,8 +34,8 @@ import java.util.Arrays;
  * and performing initialization and shutdown for the driver and its outputs.
  */
 public class JoyConImageSensor extends AbstractSensorModule<Config> {
-    static final String UID_PREFIX = "urn:osh:joycon-image:";
-    static final String XML_PREFIX = "JOYCON_IMAGE_";
+    static final String UID_PREFIX = "urn:osh:sensor:joycon-image:";
+    static final String XML_PREFIX = "joyconcamera";
 
     private static final Logger logger = LoggerFactory.getLogger(JoyConImageSensor.class);
 

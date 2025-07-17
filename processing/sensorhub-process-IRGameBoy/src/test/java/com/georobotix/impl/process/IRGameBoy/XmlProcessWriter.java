@@ -11,6 +11,16 @@ public class XmlProcessWriter {
 
     @Test
     public void testGameboyProcess() throws Exception {
+
         ProcessHelper processHelper = new ProcessHelper();
+        ProcessHelper.ProcessChainBuilder chainBuilder = processHelper.createProcessChain();
+
+        chainBuilder.uid("urn:osh:process:gameboycamera:uid");
+        chainBuilder.name("gameboyProcess");
+        chainBuilder.description("Process that takes joycon IR image and applies a gameboy camera filter to it");
+        chainBuilder.addOutputList(new GameboyProcess().getOutputList());
+        chainBuilder.addDataSource("joyconcamera", "urn:osh:sensor:joycon-image");
+        chainBuilder.addConnection("joyconcamera/joyconIROutput", "ProcessInput");
+//        chainBuilder.addConnection("ProcessInput", "gameboyProcess/")
     }
 }

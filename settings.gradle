@@ -81,7 +81,7 @@ project(':sensorhub-process-IRGameBoy').projectDir = "$rootDir/processing/sensor
 
 
 include 'sensorhub-process-helpers'
-project(':sensorhub-process-helpers').projectDir = "$processDir/processing/sensorhub-process-helpers" as File
+project(':sensorhub-process-helpers').projectDir = "$processDir/sensorhub-process-helpers" as File
 
 /*
 include 'sensorhub-process-opencv'
