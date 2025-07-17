@@ -19,8 +19,8 @@ import javax.xml.crypto.Data;
 public class GameboyProcess extends ExecutableProcessImpl {
 
     protected double timeStamp;
-    protected int imageWidth;
-    protected int imageHeight;
+    protected int imageWidth = 160; // these two are hardcoded only for the testing purposes. they change later!
+    protected int imageHeight = 120;
     protected DataArray image;
     private static final String frame = "VideoFrame";
     public static final OSHProcessInfo INFO = new OSHProcessInfo(
