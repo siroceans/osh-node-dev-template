@@ -20,7 +20,7 @@ public class gameboyDescriptionGeneration {
                 .name("gameboycamera")
                 .uid("urn:osh:process:gameboycamera")
                 .description("generic description duh")
-                .addDataSource("joyconcamera", "urn:osh:sensor:joycon-image")
+                .addDataSource("joyconcamera", "urn:osh:sensor:joycon-image:sensor001")
                 .addOutputList(p1.getOutputList())
                 .addProcess("gameboyprocess", p1)
                 .addConnection("components/joyconcamera/outputs/joyconIROutput",
