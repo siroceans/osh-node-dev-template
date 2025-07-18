@@ -81,7 +81,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
         dataEnc.addMemberAsComponent(timeEnc);
 
         BinaryBlock compressedBlock = fac.newBinaryBlock();
-        compressedBlock.setRef("/" + dataRecordInput.getComponent(1).getName());
+        compressedBlock.setRef("/" + dataRecordInput.getComponent(3).getName());
         compressedBlock.setCompression(codec);
         dataEnc.addMemberAsBlock(compressedBlock);
 
@@ -124,7 +124,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
         dataEnc.addMemberAsComponent(timeEnc);
 
         BinaryBlock compressedBlock = fac.newBinaryBlock();
-        compressedBlock.setRef("/" + dataRecordOutput.getComponent(1).getName());
+        compressedBlock.setRef("/" + dataRecordOutput.getComponent(3).getName());
         compressedBlock.setCompression(codec);
         dataEnc.addMemberAsBlock(compressedBlock);
 

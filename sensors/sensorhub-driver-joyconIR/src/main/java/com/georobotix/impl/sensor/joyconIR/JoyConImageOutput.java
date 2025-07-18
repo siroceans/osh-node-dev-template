@@ -94,7 +94,7 @@ public class JoyConImageOutput extends AbstractSensorOutput<JoyConImageSensor> {
         dataEnc.addMemberAsComponent(timeEnc);
 
         BinaryBlock compressedBlock = sweFactory.newBinaryBlock();
-        compressedBlock.setRef("/" + dataRecord.getComponent(1).getName());
+        compressedBlock.setRef("/" + dataRecord.getComponent(3).getName());
         compressedBlock.setCompression(codec);
         dataEnc.addMemberAsBlock(compressedBlock);
 
