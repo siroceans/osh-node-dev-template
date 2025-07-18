@@ -7,6 +7,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.core.CvType;
 
 import net.opengis.swe.v20.*;
+import org.opencv.imgproc.Imgproc;
 import org.sensorhub.api.processing.OSHProcessInfo;
 import org.vast.cdm.common.CDMException;
 import org.vast.data.AbstractArrayImpl;
@@ -157,7 +158,10 @@ public class GameboyProcess extends ExecutableProcessImpl {
         }
 
 
-        Mat inputImage = Imgcodecs.imdecode(new MatOfByte(jpegImageBuf), Imgcodecs.IMREAD_COLOR);
+        Mat grayImage = Imgcodecs.imdecode(new MatOfByte(jpegImageBuf), Imgcodecs.IMREAD_GRAYSCALE);
+        Mat inputImage = new Mat();
+        Imgproc.cvtColor(grayImage, inputImage, Imgproc.COLOR_GRAY2BGR);
+
         Mat outputImage = new Mat();
         Core.LUT(inputImage, lut, outputImage);
         MatOfByte outputBuffer = new MatOfByte();
