@@ -23,6 +23,10 @@ public class GameboyProcess extends ExecutableProcessImpl {
     protected int imageHeight = 120;
     protected DataArray image;
     private static final String frame = "VideoFrame";
+    private DataComponent dataRecord;
+    private DataEncoding dataEncoding;
+    private final String codec = "JPEG";
+
     public static final OSHProcessInfo INFO = new OSHProcessInfo(
             "gameboycamera",
             "Image Process",
@@ -66,7 +70,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
     }
 
     private DataComponent createImageOutput() {
-        return  fac.createRecord()
+        dataRecord =  fac.createRecord()
                 .name(frame)
                 .definition(fac.getPropertyUri("VideoFrame"))
                 .description("Image Data")
@@ -84,6 +88,21 @@ public class GameboyProcess extends ExecutableProcessImpl {
                         .build())
                 .addField("img", fac.newRgbImage(imageWidth, imageHeight, DataType.BYTE))
                 .build();
+
+        // Set Encoding
+        BinaryEncoding dataEnc = fac.newBinaryEncoding(ByteOrder.BIG_ENDIAN, ByteEncoding.RAW);
+
+        BinaryComponent timeEnc = fac.newBinaryComponent();
+        timeEnc.setRef("/" + dataRecord.getComponent(0).getName());
+        timeEnc.setCdmDataType(DataType.DOUBLE);
+        dataEnc.addMemberAsComponent(timeEnc);
+
+        BinaryBlock compressedBlock = fac.newBinaryBlock();
+        compressedBlock.setRef("/" + dataRecord.getComponent(1).getName());
+        compressedBlock.setCompression(codec);
+        dataEnc.addMemberAsBlock(compressedBlock);
+
+        return dataRecord;
     }
 
     private byte[] processImageColors(byte[] jpegImageBuf) {
