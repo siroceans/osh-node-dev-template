@@ -178,45 +178,14 @@ public class GameboyProcess extends ExecutableProcessImpl {
         // Processing the image
         AbstractDataBlock frameDataIn = ((DataBlockMixed) inputDataBlock).getUnderlyingObject()[3];
         byte[] inputJpegBuffer = (byte[]) frameDataIn.getUnderlyingObject();
+        System.out.println(inputJpegBuffer.length);
         byte[] outputJpegBuffer = processImageColors(inputJpegBuffer);
+        System.out.println(outputJpegBuffer.length);
 
         // Setting output Data Block
         AbstractDataBlock frameDataOut = ((DataBlockMixed) outputDataBlock).getUnderlyingObject()[3];
         frameDataOut.setUnderlyingObject(outputJpegBuffer);
 
         outputData.getComponent(frame).setData(outputDataBlock);
-
-        /*
-        DataBlockMixed inputImage = (DataBlockMixed) inputData.getComponent(frame).getData();
-        AbstractDataBlock[] inputBlocks = inputImage.getUnderlyingObject();
-
-        timeStamp = inputBlocks[0].getDoubleValue(0);
-        imageWidth = inputBlocks[1].getIntValue(0);
-        imageHeight = inputBlocks[2].getIntValue(0);
-        byte[] inputJpegBuffer = ((DataBlockByte) inputBlocks[3]).getUnderlyingObject();
-
-        // Process the color filter.
-        byte[] outputJpegBuffer = processImageColors(inputJpegBuffer);
-
-        // Set output image
-        /*
-        DataBlockMixed outputRecord = (DataBlockMixed) outputData.getComponent(frame).getData();
-        AbstractDataBlock[] outputBlocks = outputRecord.getUnderlyingObject();
-
-        outputBlocks[0].setDoubleValue(0, timeStamp);
-        outputBlocks[1].setIntValue(0, imageWidth);
-        outputBlocks[2].setIntValue(0, imageHeight);
-        ((DataBlockByte) outputBlocks[3]).setUnderlyingObject(outputJpegBuffer);
-
-        DataBlock dataBlock = dataRecordOutput.createDataBlock();
-        dataBlock.setDoubleValue(0, timeStamp);
-        dataBlock.setIntValue(1, this.imageWidth);
-        dataBlock.setIntValue(2, this.imageHeight);
-
-        AbstractDataBlock frameData = ((DataBlockMixed) dataBlock).getUnderlyingObject()[3];
-        frameData.setUnderlyingObject(outputJpegBuffer);
-        outputData.setUnderlyingObject(frame).setData(dataBlock);
-         */
-
     }
 }

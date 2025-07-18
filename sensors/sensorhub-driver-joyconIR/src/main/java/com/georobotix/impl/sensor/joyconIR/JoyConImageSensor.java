@@ -272,6 +272,8 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
     // ---------------------------------------------------------------------------------------------------------------//
 
     public static byte[] convertRGBToJPEG(byte[] rgbBuffer, int width, int height) throws IOException {
+
+
         // Create BufferedImage in TYPE_3BYTE_BGR (Blue, Green, Red)
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 
@@ -280,9 +282,9 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
 
         // Convert RGB to BGR (swap red and blue channels)
         for (int i = 0; i < width * height; i++) {
-            int r = rgbBuffer[i * 3];
-            int g = rgbBuffer[i * 3 + 1];
-            int b = rgbBuffer[i * 3 + 2];
+            int r = rgbBuffer[i * 3] & 0xFF;
+            int g = rgbBuffer[i * 3 + 1] & 0xFF;
+            int b = rgbBuffer[i * 3 + 2] & 0xFF;
 
             imageData[i * 3]     = (byte) b; // B
             imageData[i * 3 + 1] = (byte) g; // G
