@@ -419,10 +419,12 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
                         output.setData(jpegBufRgb);
 
                         // Debugging: saving raw buffer.
+                        /*
                         if (counter == 0 || counter == 1) {
                             String path = "C:\\Users\\radio\\dev\\osh-node-dev-template\\debug.bin";
                             Files.write(Path.of(path), bufImageRgb);
                         }
+                         */
 
                         counter++;
 
