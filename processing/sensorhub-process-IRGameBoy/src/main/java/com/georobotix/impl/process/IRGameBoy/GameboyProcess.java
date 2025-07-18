@@ -41,6 +41,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
         var imageOutput = createImageOutput();
         inputData.add(imageInput.getName(), imageInput);
         outputData.add(imageOutput.getName(), imageOutput);
+        nu.pattern.OpenCV.loadShared();
     }
 
     private DataComponent createImageInput() {
