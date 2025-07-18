@@ -184,6 +184,8 @@ public class GameboyProcess extends ExecutableProcessImpl {
         AbstractDataBlock frameDataOut = ((DataBlockMixed) outputDataBlock).getUnderlyingObject()[3];
         frameDataOut.setUnderlyingObject(outputJpegBuffer);
 
+        outputData.getComponent(frame).setData(outputDataBlock);
+
         /*
         DataBlockMixed inputImage = (DataBlockMixed) inputData.getComponent(frame).getData();
         AbstractDataBlock[] inputBlocks = inputImage.getUnderlyingObject();
