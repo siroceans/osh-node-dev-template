@@ -34,7 +34,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
     /**
      * Typically, you will initialize your input, output, and parameter data structures in the constructor
      */
-    protected GameboyProcess() {
+    public GameboyProcess() {
         super(INFO);
 
         var imageInput = createImageInput();
