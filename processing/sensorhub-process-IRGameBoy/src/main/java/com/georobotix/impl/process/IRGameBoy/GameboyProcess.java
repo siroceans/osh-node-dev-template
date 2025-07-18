@@ -140,20 +140,20 @@ public class GameboyProcess extends ExecutableProcessImpl {
     private byte[] processImageColors(byte[] jpegImageBuf) {
         // LUT to map grayscale values to 4 green gameboy colors!! (sourced gameboy color palette online)
         Mat lut = new Mat(1, 256, CvType.CV_8UC3);
-        byte[] gameboyPalette = {
-                (byte) 15, (byte) 56, (byte) 15,    // Dark green
-                (byte) 48, (byte) 98, (byte) 48,    // Medium green
-                (byte) 139, (byte) 172, (byte) 15,  // Medium Light green
-                (byte) 155, (byte) 188, (byte) 15   // Light green
+        int[] gameboyPalette = {
+                15,  56, 15,    // Dark green
+                48,  8, 48,    // Medium green
+                139, 172, 15,  // Medium Light green
+                155, 188, 15   // Light green
         };
         
         for (int i = 0; i < 256; i++) {
             int pIndex = (i / 64) * 3;
             // backwards, opencv expects bgr
             lut.put(0, i,
-                    gameboyPalette[pIndex + 2] & 0xFF,
-                    gameboyPalette[pIndex + 1] & 0xFF,
-                    gameboyPalette[pIndex] & 0xFF);
+                    gameboyPalette[pIndex + 2],
+                    gameboyPalette[pIndex + 1],
+                    gameboyPalette[pIndex]);
         }
 
 
