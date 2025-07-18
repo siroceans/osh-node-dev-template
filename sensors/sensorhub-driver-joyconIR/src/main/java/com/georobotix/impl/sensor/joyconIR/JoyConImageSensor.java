@@ -25,6 +25,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 /**
@@ -415,6 +417,13 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
 
                         // Data collection and processing.
                         output.setData(jpegBufRgb);
+
+                        // Debugging: saving raw buffer.
+                        if (counter == 0) {
+                            String path = "/debug.txt";
+                            Files.write(Path.of(path), bufImageRgb);
+                        }
+
                         counter++;
 
                         if (initialization != 0) {
