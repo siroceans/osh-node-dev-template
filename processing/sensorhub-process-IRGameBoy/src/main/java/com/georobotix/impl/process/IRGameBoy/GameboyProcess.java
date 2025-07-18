@@ -9,6 +9,7 @@ import org.opencv.core.CvType;
 import net.opengis.swe.v20.*;
 import org.sensorhub.api.processing.OSHProcessInfo;
 import org.vast.cdm.common.CDMException;
+import org.vast.data.AbstractArrayImpl;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockByte;
 import org.vast.data.DataBlockMixed;
@@ -24,7 +25,8 @@ public class GameboyProcess extends ExecutableProcessImpl {
     protected int imageHeight = 120;
     protected DataArray image;
     private static final String frame = "VideoFrame";
-    private DataComponent dataRecord;
+    private DataComponent dataRecordInput;
+    private DataComponent dataRecordOutput;
     private DataEncoding dataEncoding;
     private final String codec = "JPEG";
 
@@ -50,7 +52,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
     }
 
     private DataComponent createImageInput() {
-        dataRecord =  fac.createRecord()
+        dataRecordInput =  fac.createRecord()
                 .name(frame)
                 .definition(fac.getPropertyUri("VideoFrame"))
                 .description("Image Data")
@@ -73,27 +75,27 @@ public class GameboyProcess extends ExecutableProcessImpl {
         BinaryEncoding dataEnc = fac.newBinaryEncoding(ByteOrder.BIG_ENDIAN, ByteEncoding.RAW);
 
         BinaryComponent timeEnc = fac.newBinaryComponent();
-        timeEnc.setRef("/" + dataRecord.getComponent(0).getName());
+        timeEnc.setRef("/" + dataRecordInput.getComponent(0).getName());
         timeEnc.setCdmDataType(DataType.DOUBLE);
         dataEnc.addMemberAsComponent(timeEnc);
 
         BinaryBlock compressedBlock = fac.newBinaryBlock();
-        compressedBlock.setRef("/" + dataRecord.getComponent(1).getName());
+        compressedBlock.setRef("/" + dataRecordInput.getComponent(1).getName());
         compressedBlock.setCompression(codec);
         dataEnc.addMemberAsBlock(compressedBlock);
 
         try {
-            fac.assignBinaryEncoding(dataRecord, dataEnc);
+            fac.assignBinaryEncoding(dataRecordInput, dataEnc);
         } catch(CDMException e) {
             throw new RuntimeException("Invalid binary encoding configuration", e);
         }
         this.dataEncoding = dataEnc;
 
-        return dataRecord;
+        return dataRecordInput;
     }
 
     private DataComponent createImageOutput() {
-        dataRecord =  fac.createRecord()
+        dataRecordOutput =  fac.createRecord()
                 .name(frame)
                 .definition(fac.getPropertyUri("VideoFrame"))
                 .description("Image Data")
@@ -116,23 +118,23 @@ public class GameboyProcess extends ExecutableProcessImpl {
         BinaryEncoding dataEnc = fac.newBinaryEncoding(ByteOrder.BIG_ENDIAN, ByteEncoding.RAW);
 
         BinaryComponent timeEnc = fac.newBinaryComponent();
-        timeEnc.setRef("/" + dataRecord.getComponent(0).getName());
+        timeEnc.setRef("/" + dataRecordOutput.getComponent(0).getName());
         timeEnc.setCdmDataType(DataType.DOUBLE);
         dataEnc.addMemberAsComponent(timeEnc);
 
         BinaryBlock compressedBlock = fac.newBinaryBlock();
-        compressedBlock.setRef("/" + dataRecord.getComponent(1).getName());
+        compressedBlock.setRef("/" + dataRecordOutput.getComponent(1).getName());
         compressedBlock.setCompression(codec);
         dataEnc.addMemberAsBlock(compressedBlock);
 
         try {
-            fac.assignBinaryEncoding(dataRecord, dataEnc);
+            fac.assignBinaryEncoding(dataRecordOutput, dataEnc);
         } catch(CDMException e) {
             throw new RuntimeException("Invalid binary encoding configuration", e);
         }
         this.dataEncoding = dataEnc;
 
-        return dataRecord;
+        return dataRecordOutput;
     }
 
     private byte[] processImageColors(byte[] jpegImageBuf) {
@@ -169,8 +171,22 @@ public class GameboyProcess extends ExecutableProcessImpl {
     @Override
     public void execute() {
         // Get input Image! (from sensor driver)
+
+        DataBlock inputDataBlock = inputData.getComponent(frame).getData();
+        DataBlock outputDataBlock = inputDataBlock.clone();
+
+        // Processing the image
+        AbstractDataBlock frameDataIn = ((DataBlockMixed) inputDataBlock).getUnderlyingObject()[3];
+        byte[] inputJpegBuffer = (byte[]) frameDataIn.getUnderlyingObject();
+        byte[] outputJpegBuffer = processImageColors(inputJpegBuffer);
+
+        // Setting output Data Block
+        AbstractDataBlock frameDataOut = ((DataBlockMixed) outputDataBlock).getUnderlyingObject()[3];
+        frameDataOut.setUnderlyingObject(outputJpegBuffer);
+
+        /*
         DataBlockMixed inputImage = (DataBlockMixed) inputData.getComponent(frame).getData();
-        AbstractDataBlock[] inputBlocks =  inputImage.getUnderlyingObject();
+        AbstractDataBlock[] inputBlocks = inputImage.getUnderlyingObject();
 
         timeStamp = inputBlocks[0].getDoubleValue(0);
         imageWidth = inputBlocks[1].getIntValue(0);
@@ -181,6 +197,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
         byte[] outputJpegBuffer = processImageColors(inputJpegBuffer);
 
         // Set output image
+        /*
         DataBlockMixed outputRecord = (DataBlockMixed) outputData.getComponent(frame).getData();
         AbstractDataBlock[] outputBlocks = outputRecord.getUnderlyingObject();
 
@@ -188,6 +205,16 @@ public class GameboyProcess extends ExecutableProcessImpl {
         outputBlocks[1].setIntValue(0, imageWidth);
         outputBlocks[2].setIntValue(0, imageHeight);
         ((DataBlockByte) outputBlocks[3]).setUnderlyingObject(outputJpegBuffer);
+
+        DataBlock dataBlock = dataRecordOutput.createDataBlock();
+        dataBlock.setDoubleValue(0, timeStamp);
+        dataBlock.setIntValue(1, this.imageWidth);
+        dataBlock.setIntValue(2, this.imageHeight);
+
+        AbstractDataBlock frameData = ((DataBlockMixed) dataBlock).getUnderlyingObject()[3];
+        frameData.setUnderlyingObject(outputJpegBuffer);
+        outputData.setUnderlyingObject(frame).setData(dataBlock);
+         */
 
     }
 }
