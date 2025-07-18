@@ -8,6 +8,7 @@ import org.opencv.core.CvType;
 
 import net.opengis.swe.v20.*;
 import org.sensorhub.api.processing.OSHProcessInfo;
+import org.vast.cdm.common.CDMException;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockByte;
 import org.vast.data.DataBlockMixed;
@@ -49,7 +50,7 @@ public class GameboyProcess extends ExecutableProcessImpl {
     }
 
     private DataComponent createImageInput() {
-        return fac.createRecord()
+        dataRecord =  fac.createRecord()
                 .name(frame)
                 .definition(fac.getPropertyUri("VideoFrame"))
                 .description("Image Data")
@@ -67,6 +68,28 @@ public class GameboyProcess extends ExecutableProcessImpl {
                         .build())
                 .addField("img", fac.newRgbImage(imageWidth, imageHeight, DataType.BYTE))
                 .build();
+
+        // Set Encoding
+        BinaryEncoding dataEnc = fac.newBinaryEncoding(ByteOrder.BIG_ENDIAN, ByteEncoding.RAW);
+
+        BinaryComponent timeEnc = fac.newBinaryComponent();
+        timeEnc.setRef("/" + dataRecord.getComponent(0).getName());
+        timeEnc.setCdmDataType(DataType.DOUBLE);
+        dataEnc.addMemberAsComponent(timeEnc);
+
+        BinaryBlock compressedBlock = fac.newBinaryBlock();
+        compressedBlock.setRef("/" + dataRecord.getComponent(1).getName());
+        compressedBlock.setCompression(codec);
+        dataEnc.addMemberAsBlock(compressedBlock);
+
+        try {
+            fac.assignBinaryEncoding(dataRecord, dataEnc);
+        } catch(CDMException e) {
+            throw new RuntimeException("Invalid binary encoding configuration", e);
+        }
+        this.dataEncoding = dataEnc;
+
+        return dataRecord;
     }
 
     private DataComponent createImageOutput() {
@@ -101,6 +124,13 @@ public class GameboyProcess extends ExecutableProcessImpl {
         compressedBlock.setRef("/" + dataRecord.getComponent(1).getName());
         compressedBlock.setCompression(codec);
         dataEnc.addMemberAsBlock(compressedBlock);
+
+        try {
+            fac.assignBinaryEncoding(dataRecord, dataEnc);
+        } catch(CDMException e) {
+            throw new RuntimeException("Invalid binary encoding configuration", e);
+        }
+        this.dataEncoding = dataEnc;
 
         return dataRecord;
     }
