@@ -11,6 +11,14 @@
  ******************************* END LICENSE BLOCK ***************************/
 package com.georobotix.impl.sensor.joyconIR;
 
+// OpenCV imports
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 // OSH imports
 import org.sensorhub.api.common.SensorHubException;
 import org.sensorhub.impl.sensor.AbstractSensorModule;
@@ -271,9 +279,43 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
 
     // ---------------------------------------------------------------------------------------------------------------//
 
-    public static byte[] convertRGBToJPEG(byte[] rgbBuffer, int width, int height) throws IOException {
+    private byte[] gameboyFilter(byte[] jpegImageBuf) {
+        // load opencv library
+        nu.pattern.OpenCV.loadShared();
+
+        // LUT to map grayscale values to 4 green gameboy colors!! (sourced gameboy color palette online)
+        Mat lut = new Mat(1, 256, CvType.CV_8UC3);
+        int[] gameboyPalette = {
+                15,  56, 15,    // Dark green
+                48,  8, 48,    // Medium green
+                139, 172, 15,  // Medium Light green
+                155, 188, 15   // Light green
+        };
+
+        for (int i = 0; i < 256; i++) {
+            int pIndex = (i / 64) * 3;
+            // backwards, opencv expects bgr
+            lut.put(0, i,
+                    gameboyPalette[pIndex + 2],
+                    gameboyPalette[pIndex + 1],
+                    gameboyPalette[pIndex]);
+        }
 
 
+        Mat grayImage = Imgcodecs.imdecode(new MatOfByte(jpegImageBuf), Imgcodecs.IMREAD_GRAYSCALE);
+        Mat inputImage = new Mat();
+        Imgproc.cvtColor(grayImage, inputImage, Imgproc.COLOR_GRAY2BGR);
+
+        Mat outputImage = new Mat();
+        Core.LUT(inputImage, lut, outputImage);
+        MatOfByte outputBuffer = new MatOfByte();
+        Imgcodecs.imencode(".jpg", outputImage, outputBuffer);
+
+        return outputBuffer.toArray();
+    }
+
+
+    private static byte[] convertRGBToJPEG(byte[] rgbBuffer, int width, int height) throws IOException {
         // Create BufferedImage in TYPE_3BYTE_BGR (Blue, Green, Red)
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 
@@ -319,6 +361,7 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
         byte[] reply = new byte[0x170];
         byte[] bufImageRgb;
         byte[] jpegBufRgb;
+        byte [] gameboyBuf;
 
         /*
         int badSignal = 0;
@@ -416,9 +459,10 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
                         // Change 8bpp grayscale image buffer to a 24bpp rgb one.
                         bufImageRgb = grayscaleToRgb(bufImage);
                         jpegBufRgb = convertRGBToJPEG(bufImageRgb, irImageWidth, irImageHeight);
+                        gameboyBuf = gameboyFilter(jpegBufRgb);
 
                         // Data collection and processing.
-                        output.setData(jpegBufRgb);
+                        output.setData(gameboyBuf);
 
                         // Debugging: saving raw buffer.
                         /*
