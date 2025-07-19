@@ -7,10 +7,12 @@ import net.opengis.swe.v20.*;
 import org.junit.Test;
 import org.vast.data.SWEFactory;
 import org.vast.process.ProcessException;
+import org.vast.swe.helper.RasterHelper;
 import org.vast.xml.XMLWriterException;
 
 public class gameboyDescriptionGeneration {
     SWEFactory fac = new SWEFactory();
+    RasterHelper rasfac = new RasterHelper();
     ProcessHelper processHelper = new ProcessHelper();
 
     public AggregateProcess generateDescription() throws ProcessException {
