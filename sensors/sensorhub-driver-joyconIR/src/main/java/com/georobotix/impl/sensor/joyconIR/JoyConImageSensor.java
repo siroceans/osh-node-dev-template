@@ -292,8 +292,15 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
                 155, 188, 15   // Light green
         };
 
+        int[] exposureValues = {32, 96, 192, 256};
+
         for (int i = 0; i < 256; i++) {
-            int pIndex = (i / 64) * 3;
+            int pIndex;
+            if (i < exposureValues[0]) pIndex = 0;
+            else if (i < exposureValues[1]) pIndex = 3;
+            else if (i < exposureValues[2]) pIndex = 6;
+            else pIndex = 9;
+
             // backwards, opencv expects bgr
             lut.put(0, i,
                     gameboyPalette[pIndex + 2],
@@ -303,8 +310,10 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
 
 
         Mat grayImage = Imgcodecs.imdecode(new MatOfByte(jpegImageBuf), Imgcodecs.IMREAD_GRAYSCALE);
+        Mat invertedImage = new Mat();
         Mat inputImage = new Mat();
-        Imgproc.cvtColor(grayImage, inputImage, Imgproc.COLOR_GRAY2BGR);
+        Imgproc.cvtColor(grayImage, invertedImage, Imgproc.COLOR_GRAY2BGR);
+        Core.bitwise_not(invertedImage, inputImage);
 
         Mat outputImage = new Mat();
         Core.LUT(inputImage, lut, outputImage);
