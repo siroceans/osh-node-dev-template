@@ -3,6 +3,7 @@ package com.georobotix.impl.process.IRGameBoy;
 import com.botts.process.helpers.ProcessHelper;
 import com.google.errorprone.annotations.RestrictedApi;
 import net.opengis.sensorml.v20.AggregateProcess;
+import net.opengis.swe.v20.*;
 import org.junit.Test;
 import org.vast.data.SWEFactory;
 import org.vast.process.ProcessException;
