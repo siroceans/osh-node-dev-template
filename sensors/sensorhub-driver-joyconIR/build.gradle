@@ -9,8 +9,9 @@ repositories {
 dependencies {
     implementation 'org.sensorhub:sensorhub-core:' + oshCoreVersion
     implementation project(':sensorhub-service-video')
-//    implementation project(':sensorhub-driver-videocam')
     testImplementation('junit:junit:4.13.1')
+    implementation('org.openpnp:opencv:4.9.0-0')
+
 
     // JNA, HIDPI, and hid4java.
     implementation 'net.java.dev.jna:jna:5.13.0'
