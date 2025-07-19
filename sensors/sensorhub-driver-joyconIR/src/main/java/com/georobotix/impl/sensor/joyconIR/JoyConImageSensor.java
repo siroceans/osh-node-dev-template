@@ -292,13 +292,17 @@ public class JoyConImageSensor extends AbstractSensorModule<Config> {
                 155, 188, 15   // Light green
         };
 
-        int[] exposureValues = {32, 96, 192, 256};
+        int[] exposureValues = {32, 64, 96, 124, 160, 224, 240, 256};
 
         for (int i = 0; i < 256; i++) {
             int pIndex;
-            if (i < exposureValues[0]) pIndex = 0;
+            if (i < exposureValues[0]) pIndex = 3;
             else if (i < exposureValues[1]) pIndex = 3;
             else if (i < exposureValues[2]) pIndex = 6;
+            else if (i < exposureValues[3]) pIndex = 3;
+            else if (i < exposureValues[4]) pIndex = 6;
+            else if (i < exposureValues[5]) pIndex = 3;
+            else if (i < exposureValues[6]) pIndex = 6;
             else pIndex = 9;
 
             // backwards, opencv expects bgr
