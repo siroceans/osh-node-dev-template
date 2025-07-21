@@ -242,6 +242,7 @@ public class Planet {
              if (i > maxno) iterate = false;
          }
 
+         /*
         System.out.println("xn");
         System.out.println(xn);
         System.out.println("rmag");
@@ -252,6 +253,7 @@ public class Planet {
         System.out.println(s);
         System.out.println("z");
         System.out.println(z);
+          */
 
          double f = 1 - Math.pow(xn, 2) / rmag * c;
          double g = t - Math.pow(xn, 3) / Math.sqrt(mu) * s;
