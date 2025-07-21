@@ -15,7 +15,7 @@ import org.sensorhub.api.config.DisplayInfo;
 import org.sensorhub.api.sensor.SensorConfig;
 
 /**
- * Configuration settings for the {@link Sensor} driver exposed via the OpenSensorHub Admin panel.
+ * Configuration settings for the {@link PlanetPositionSensor} driver exposed via the OpenSensorHub Admin panel.
  * <p>
  * Public fields are exposed in the Admin panel for configuration by the user.
  * These fields can be annotated with the DisplayInfo annotation to provide additional information to the user
@@ -34,4 +34,11 @@ public class Config extends SensorConfig {
     @DisplayInfo.Required
     @DisplayInfo(desc = "Serial number or unique identifier")
     public String serialNumber = "sensor001";
+
+    /**
+     * The name of the planet that the sensor is to be configured for.
+     */
+    @DisplayInfo.Required
+    @DisplayInfo(desc = "Name of the planet that you want to get observations for.")
+    public String planetNameConfig;
 }

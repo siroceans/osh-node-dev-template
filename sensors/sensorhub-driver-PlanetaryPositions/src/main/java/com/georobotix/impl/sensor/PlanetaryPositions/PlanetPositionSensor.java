@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
  * This class is responsible for providing sensor information, managing output registration,
  * and performing initialization and shutdown for the driver and its outputs.
  */
-public class Sensor extends AbstractSensorModule<Config> {
+public class PlanetPositionSensor extends AbstractSensorModule<Config> {
     static final String UID_PREFIX = "urn:osh:planetary-position:";
     static final String XML_PREFIX = "PLANET_POSITION_";
 
-    private static final Logger logger = LoggerFactory.getLogger(Sensor.class);
+    private static final Logger logger = LoggerFactory.getLogger(PlanetPositionSensor.class);
 
     PlanetPositionOutput output;
     Thread processingThread;

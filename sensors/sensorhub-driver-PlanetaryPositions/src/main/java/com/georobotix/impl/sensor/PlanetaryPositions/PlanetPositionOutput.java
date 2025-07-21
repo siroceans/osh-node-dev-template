@@ -18,14 +18,13 @@ import net.opengis.swe.v20.DataRecord;
 import org.sensorhub.api.data.DataEvent;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;
 import org.vast.swe.SWEHelper;
-import org.vast.swe.helper.GeoPosHelper;
 
 import java.util.ArrayList;
 
 /**
- * Output specification and provider for {@link Sensor}.
+ * Output specification and provider for {@link PlanetPositionSensor}.
  */
-public class PlanetPositionOutput extends AbstractSensorOutput<Sensor> {
+public class PlanetPositionOutput extends AbstractSensorOutput<PlanetPositionSensor> {
     static final String SENSOR_OUTPUT_NAME = "PlanetPositions";
     static final String SENSOR_OUTPUT_LABEL = "PlanetaryPositions Output";
     static final String SENSOR_OUTPUT_DESCRIPTION = "Current heliocentric positions of the planets.";
@@ -44,7 +43,7 @@ public class PlanetPositionOutput extends AbstractSensorOutput<Sensor> {
      *
      * @param parentSensor Sensor driver providing this output.
      */
-    PlanetPositionOutput(Sensor parentSensor) {
+    PlanetPositionOutput(PlanetPositionSensor parentSensor) {
         super(SENSOR_OUTPUT_NAME, parentSensor);
     }
 
