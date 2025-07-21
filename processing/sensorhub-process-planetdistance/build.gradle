@@ -1,0 +1,36 @@
+description = 'process that calculates the distance of a planet from Earth'
+ext.details = "Uses information on the J2000 Epoch"
+version = '1.0.0'
+
+dependencies {
+    implementation 'org.sensorhub:sensorhub-core:' + oshCoreVersion
+    testImplementation('junit:junit:4.13.1')
+}
+
+// exclude tests requiring connection to the sensor
+// these have to be run manually
+//      If tests are to be excluded list them here as follows
+//          exclude '**/TestNameClass.class'
+test {
+    useJUnit()
+}
+
+// add info to OSGi manifest
+osgi {
+    manifest {
+        attributes ('Bundle-Vendor': 'Georobotix Inc')
+        attributes ('Bundle-Activator': 'com.georobotix.impl.process.planetdistance.Activator')
+    }
+}
+
+// add info to maven pom
+ext.pom >>= {
+    developers {
+        developer {
+            id 'siroceans'
+            name 'Jorge Mares'
+            organization 'Georobotix Inc'
+            organizationUrl ''
+        }
+    }
+}

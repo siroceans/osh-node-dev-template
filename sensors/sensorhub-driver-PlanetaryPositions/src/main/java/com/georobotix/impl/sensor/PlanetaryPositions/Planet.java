@@ -29,7 +29,7 @@ public class Planet {
     private double currentTime; // Time elapsed snce J2000 Epoch! [TU]
 
     public Planet(String planetName) {
-        // Setting Orbital Elements at the J2000 epoch
+        // Setting Orbital Elements for each planet. Observations made in the J2000 Epoch!
         switch (planetName.toLowerCase()) {
             case ("mercury"):
                 this.a = 0.387099;
