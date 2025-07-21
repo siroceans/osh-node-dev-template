@@ -139,6 +139,9 @@ public class GameboyProcess extends ExecutableProcessImpl {
     }
 
     private byte[] processImageColors(byte[] jpegImageBuf) {
+        // load opencv library
+        nu.pattern.OpenCV.loadShared();
+
         // LUT to map grayscale values to 4 green gameboy colors!! (sourced gameboy color palette online)
         Mat lut = new Mat(1, 256, CvType.CV_8UC3);
         int[] gameboyPalette = {
@@ -147,9 +150,20 @@ public class GameboyProcess extends ExecutableProcessImpl {
                 139, 172, 15,  // Medium Light green
                 155, 188, 15   // Light green
         };
-        
+
+        int[] exposureValues = {32, 64, 96, 124, 160, 224, 240, 256};
+
         for (int i = 0; i < 256; i++) {
-            int pIndex = (i / 64) * 3;
+            int pIndex;
+            if (i < exposureValues[0]) pIndex = 3;
+            else if (i < exposureValues[1]) pIndex = 3;
+            else if (i < exposureValues[2]) pIndex = 6;
+            else if (i < exposureValues[3]) pIndex = 3;
+            else if (i < exposureValues[4]) pIndex = 6;
+            else if (i < exposureValues[5]) pIndex = 3;
+            else if (i < exposureValues[6]) pIndex = 6;
+            else pIndex = 9;
+
             // backwards, opencv expects bgr
             lut.put(0, i,
                     gameboyPalette[pIndex + 2],
@@ -159,8 +173,10 @@ public class GameboyProcess extends ExecutableProcessImpl {
 
 
         Mat grayImage = Imgcodecs.imdecode(new MatOfByte(jpegImageBuf), Imgcodecs.IMREAD_GRAYSCALE);
+        Mat invertedImage = new Mat();
         Mat inputImage = new Mat();
-        Imgproc.cvtColor(grayImage, inputImage, Imgproc.COLOR_GRAY2BGR);
+        Imgproc.cvtColor(grayImage, invertedImage, Imgproc.COLOR_GRAY2BGR);
+        Core.bitwise_not(invertedImage, inputImage);
 
         Mat outputImage = new Mat();
         Core.LUT(inputImage, lut, outputImage);
