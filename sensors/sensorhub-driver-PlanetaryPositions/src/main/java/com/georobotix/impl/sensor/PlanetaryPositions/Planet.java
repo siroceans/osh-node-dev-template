@@ -1,4 +1,4 @@
-package org.example;
+package com.georobotix.impl.sensor.PlanetaryPositions;
 
 import com.sun.jdi.connect.Connector;
 import org.ejml.simple.SimpleMatrix;
@@ -308,6 +308,10 @@ public class Planet {
     public double[] getCurrentVelocity() {
         calculateCurrent();
         return vCurrent;
+    }
+
+    public String getPlanetName() {
+        return this.name.toUpperCase();
     }
 
 }

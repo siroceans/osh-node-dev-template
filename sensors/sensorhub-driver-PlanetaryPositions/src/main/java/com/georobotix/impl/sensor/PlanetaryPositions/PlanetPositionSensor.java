@@ -32,6 +32,11 @@ public class PlanetPositionSensor extends AbstractSensorModule<Config> {
     Thread processingThread;
     volatile boolean doProcessing = true;
 
+    // Planet location and velocity values
+    Planet sensorPlanet;
+    double[] planetPos;
+    double[] planetVel;
+
     @Override
     public void doInit() throws SensorHubException {
         super.doInit();
@@ -44,6 +49,9 @@ public class PlanetPositionSensor extends AbstractSensorModule<Config> {
         output = new PlanetPositionOutput(this);
         addOutput(output, false);
         output.doInit();
+
+        // Initialize the desired planet.
+        Planet sensorPlanet = new Planet(config.planetNameConfig);
     }
 
     @Override
@@ -74,6 +82,10 @@ public class PlanetPositionSensor extends AbstractSensorModule<Config> {
         processingThread = new Thread(() -> {
             while (doProcessing) {
                 // Simulate data collection and processing
+                planetPos = sensorPlanet.getCurrentPosition();
+                planetVel = sensorPlanet.getCurrentVelocity();
+
+                output.setData(System.currentTimeMillis(), sensorPlanet.getPlanetName(), planetPos, planetVel);
 
                 // Simulate a delay between data samples
                 try {
