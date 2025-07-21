@@ -51,7 +51,7 @@ public class PlanetPositionSensor extends AbstractSensorModule<Config> {
         output.doInit();
 
         // Initialize the desired planet.
-        Planet sensorPlanet = new Planet(config.planetNameConfig);
+        this.sensorPlanet = new Planet(config.planetNameConfig);
     }
 
     @Override
