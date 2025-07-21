@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Sensor extends AbstractSensorModule<Config> {
     static final String UID_PREFIX = "urn:osh:planetary-position:";
-    static final String XML_PREFIX = "PANET_POSITION_";
+    static final String XML_PREFIX = "PLANET_POSITION_";
 
     private static final Logger logger = LoggerFactory.getLogger(Sensor.class);
 
@@ -74,7 +74,6 @@ public class Sensor extends AbstractSensorModule<Config> {
         processingThread = new Thread(() -> {
             while (doProcessing) {
                 // Simulate data collection and processing
-                output.setData(System.currentTimeMillis(), "Sample Data");
 
                 // Simulate a delay between data samples
                 try {
