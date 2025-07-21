@@ -9,7 +9,7 @@
 
  Copyright (C) 2020-2025 Botts Innovative Research, Inc. All Rights Reserved.
  ******************************* END LICENSE BLOCK ***************************/
-package com.sample.impl.sensor.drivername;
+package com.georobotix.impl.sensor.PlanetaryPositions;
 
 import org.sensorhub.api.common.SensorHubException;
 import org.sensorhub.impl.sensor.AbstractSensorModule;
@@ -23,12 +23,12 @@ import org.slf4j.LoggerFactory;
  * and performing initialization and shutdown for the driver and its outputs.
  */
 public class Sensor extends AbstractSensorModule<Config> {
-    static final String UID_PREFIX = "urn:osh:template_driver:";
-    static final String XML_PREFIX = "TEMPLATE_DRIVER_";
+    static final String UID_PREFIX = "urn:osh:planetary-position:";
+    static final String XML_PREFIX = "PANET_POSITION_";
 
     private static final Logger logger = LoggerFactory.getLogger(Sensor.class);
 
-    Output output;
+    PlanetPositionOutput output;
     Thread processingThread;
     volatile boolean doProcessing = true;
 
@@ -41,7 +41,7 @@ public class Sensor extends AbstractSensorModule<Config> {
         generateXmlID(XML_PREFIX, config.serialNumber);
 
         // Create and initialize output
-        output = new Output(this);
+        output = new PlanetPositionOutput(this);
         addOutput(output, false);
         output.doInit();
     }

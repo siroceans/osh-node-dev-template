@@ -1,12 +1,17 @@
-description = 'Put your description here'
-ext.details = "Details here"
+description = 'Sensor that calculates the current heliocentric position of the planets in our solar system (plus pluto)'
+ext.details = "Calculations based on observations made on the J2000 Epoch."
 version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     implementation 'org.sensorhub:sensorhub-core:' + oshCoreVersion
 //    implementation project(':sensorhub-service-video')
 //    implementation project(':sensorhub-driver-videocam')
     testImplementation('junit:junit:4.13.1')
+    implementation 'org.ejml:ejml-simple:0.44.0:'
 }
 
 // exclude tests requiring connection to the sensor
@@ -20,8 +25,8 @@ test {
 // add info to OSGi manifest
 osgi {
     manifest {
-        attributes ('Bundle-Vendor': 'Botts Inc')
-        attributes ('Bundle-Activator': 'com.sample.impl.sensor.drivername.Activator')
+        attributes ('Bundle-Vendor': 'Georobotix Inc')
+        attributes ('Bundle-Activator': 'com.georobotix.impl.sensor.PlanetaryPositions.Activator')
     }
 }
 
@@ -29,9 +34,9 @@ osgi {
 ext.pom >>= {
     developers {
         developer {
-            id 'some id'
-            name 'Your name'
-            organization ''
+            id 'siroceans'
+            name 'Jorge Mares'
+            organization 'Georobotix'
             organizationUrl ''
         }
     }
