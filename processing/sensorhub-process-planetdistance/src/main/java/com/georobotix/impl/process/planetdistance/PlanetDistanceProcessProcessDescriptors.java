@@ -2,9 +2,9 @@ package com.georobotix.impl.process.planetdistance;
 
 import org.sensorhub.impl.processing.AbstractProcessProvider;
 
-public class ProcessDescriptors extends AbstractProcessProvider {
+public class PlanetDistanceProcessProcessDescriptors extends AbstractProcessProvider {
 
-    public ProcessDescriptors() {
+    public PlanetDistanceProcessProcessDescriptors() {
         addImpl(MyProcess.INFO);
     }
 

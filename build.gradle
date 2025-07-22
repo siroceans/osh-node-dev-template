@@ -22,6 +22,7 @@ dependencies {
   implementation project(':sensorhub-process-IRGameBoy')
   implementation project(':sensorhub-process-helpers')
   implementation project(':sensorhub-driver-PlanetaryPositions')
+  implementation project(':sensorhub-process-planetdistance')
 
 //  implementation project(':[storage-module-name]')
 //  implementation project(':[service-name]')

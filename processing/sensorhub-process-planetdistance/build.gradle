@@ -5,6 +5,8 @@ version = '1.0.0'
 dependencies {
     implementation 'org.sensorhub:sensorhub-core:' + oshCoreVersion
     testImplementation('junit:junit:4.13.1')
+    implementation 'org.ejml:ejml-simple:0.44.0:'
+
 }
 
 // exclude tests requiring connection to the sensor
